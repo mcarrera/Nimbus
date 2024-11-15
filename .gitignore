@@ -391,3 +391,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Ignore LocalDB and MDF files
+*.mdf
+*.ldf
+*/.sqlite
+*.sqlite
