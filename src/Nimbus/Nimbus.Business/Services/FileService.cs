@@ -44,6 +44,24 @@ namespace Nimbus.Business.Services
             await _unitOfWork.CommitAsync(cancellationToken);
         }
 
+        public async Task<FileResponse?> GetFileByIdAsync(Guid fileId, CancellationToken cancellationToken)
+        {
+            var fileEntity = await _unitOfWork.GetFileByIdAsync(fileId, cancellationToken);
+
+            if (fileEntity == null)
+            {
+                return null;
+            }
+
+            return new FileResponse
+            {
+                Id = fileEntity.Id,
+                FileName = fileEntity.FileName,
+                ContentType = fileEntity.MimeType,
+                FileSize = fileEntity.FileSize ?? 0,
+                Base64Content = Convert.ToBase64String(fileEntity.FileContent)
+            };
+        }
         private Guid GetFolderIdOrDefault(Guid? folderId)
         {
             // if a folder Id is not provided, we default to the root folder Id (from the configuration)

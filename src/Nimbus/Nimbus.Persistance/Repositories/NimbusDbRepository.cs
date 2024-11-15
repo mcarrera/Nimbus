@@ -17,5 +17,9 @@ namespace Nimbus.Persistance.Repositories
         {
             return await _dbContext.Files.Where(x => x.ParentFolderId == folderId).ToListAsync(cancellationToken);
         }
+        public async Task<Entities.File?> GetFileByIdAsync(Guid fileId, CancellationToken cancellationToken)
+        {
+            return await _dbContext.Files.FirstOrDefaultAsync(f => f.Id == fileId, cancellationToken);
+        }
     }
 }

@@ -38,5 +38,25 @@ namespace Nimbus.WebApi.Controllers
             return Ok("File uploaded successfully");
 
         }
+
+        [HttpGet("{fileId}")]
+        public async Task<IActionResult> GetFileByIdAsync(Guid fileId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var fileResponse = await _fileService.GetFileByIdAsync(fileId, cancellationToken);
+
+                if (fileResponse == null)
+                {
+                    return NotFound($"File with ID {fileId} not found.");
+                }
+
+                return Ok(fileResponse);
+            }
+            catch (OperationCanceledException)
+            {
+                return StatusCode(StatusCodes.Status408RequestTimeout, "The request was canceled.");
+            }
+        }
     }
 }

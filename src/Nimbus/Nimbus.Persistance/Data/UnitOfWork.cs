@@ -20,11 +20,17 @@ namespace Nimbus.Persistance.Data
 
         public async Task PersistFileAsync(Entities.File fileEntity, CancellationToken cancellationToken)
         {
-            // todo: in future implementations, we will persist the file to a cloud BLOB or a filesystem,
-            // then we will insert the file metadata in the datase
+            // todo: in future implementations, we will persist the file to a cloud BLOB or a filesystem
+            // so the UOW will first persist the file, and upon success it will insert the file metadata in the datase
 
             await _nimbusDbRepository.AddFile(fileEntity, cancellationToken);
         }
+
+        public async Task<Entities.File?> GetFileByIdAsync(Guid fileId, CancellationToken cancellationToken)
+        {
+            return await _nimbusDbRepository.GetFileByIdAsync(fileId, cancellationToken);
+        }
+
 
         public void Dispose()
         {

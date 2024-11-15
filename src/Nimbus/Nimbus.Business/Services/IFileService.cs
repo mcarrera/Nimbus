@@ -7,5 +7,6 @@ namespace Nimbus.Business.Services
     {
         Task<Result<IEnumerable<FileDescriptor>>> GetFileListAsync(Guid? folderId, CancellationToken cancellationToken);
         Task SaveFileAsync(FileUploadRequest request, CancellationToken cancellationToken);
+        Task<FileResponse?> GetFileByIdAsync(Guid fileId, CancellationToken cancellationToken);
     }
 }
