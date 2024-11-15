@@ -59,7 +59,7 @@ namespace Nimbus.Business.Services
                 FileName = fileEntity.FileName,
                 ContentType = fileEntity.MimeType,
                 FileSize = fileEntity.FileSize ?? 0,
-                Base64Content = Convert.ToBase64String(fileEntity.FileContent)
+                Base64Content = fileEntity.FileContent == null ? string.Empty : Convert.ToBase64String(fileEntity.FileContent)
             };
         }
         private Guid GetFolderIdOrDefault(Guid? folderId)
