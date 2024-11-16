@@ -41,6 +41,7 @@ namespace Nimbus.WebApi
             builder.Services.AddScoped<INimbusDbRepository, NimbusDbRepository>();
 
             builder.Services.AddScoped<IFileService, FileService>();
+            builder.Services.AddScoped<IFolderService, FolderService>();
 
             var app = builder.Build();
 

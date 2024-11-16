@@ -70,9 +70,9 @@ namespace Nimbus.Tests.WebApi
             var result = await _controller.UploadFileAsync(fileUploadRequest, CancellationToken.None);
 
             // Assert
-            var objectResult = Assert.IsType<Microsoft.AspNetCore.Mvc.BadRequestObjectResult>(result);
+            var objectResult = Assert.IsType<BadRequestObjectResult>(result);
             Assert.Equal(400, objectResult.StatusCode);
-            Assert.False(string.IsNullOrEmpty(objectResult.Value.ToString()));
+            Assert.False(string.IsNullOrEmpty(objectResult?.Value?.ToString()));
         }
     }
 }

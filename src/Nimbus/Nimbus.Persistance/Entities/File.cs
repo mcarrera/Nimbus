@@ -21,4 +21,9 @@ public partial class File
     public DateTime? DeletedDateTime { get; set; }
 
     public DateTime? ModifiedDate { get; set; }
+
+    // Navigation properties
+    public virtual File? ParentFolder { get; set; }
+
+    public virtual ICollection<File>? ChildFiles { get; set; }
 }

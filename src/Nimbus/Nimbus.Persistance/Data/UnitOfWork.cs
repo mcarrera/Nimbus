@@ -12,12 +12,6 @@ namespace Nimbus.Persistance.Data
             return await _nimbusDbRepository.GetFileList(folderId, cancellationToken);
         }
 
-
-        public async Task CommitAsync(CancellationToken cancellationToken)
-        {
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-
         public async Task PersistFileAsync(Entities.File fileEntity, CancellationToken cancellationToken)
         {
             // todo: in future implementations, we will persist the file to a cloud BLOB or a filesystem
@@ -26,11 +20,21 @@ namespace Nimbus.Persistance.Data
             await _nimbusDbRepository.AddFile(fileEntity, cancellationToken);
         }
 
+        public async Task AddFolderAsync(Entities.File fileEntity, CancellationToken cancellationToken)
+        {
+            await _nimbusDbRepository.AddFile(fileEntity, cancellationToken);
+        }
+
         public async Task<Entities.File?> GetFileByIdAsync(Guid fileId, CancellationToken cancellationToken)
         {
             return await _nimbusDbRepository.GetFileByIdAsync(fileId, cancellationToken);
         }
 
+
+        public async Task CommitAsync(CancellationToken cancellationToken)
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+        }
 
         public void Dispose()
         {
