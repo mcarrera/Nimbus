@@ -21,9 +21,31 @@ namespace Nimbus.WebApi
 
             builder.Services.AddControllers();
 
-            builder.Services.AddEndpointsApiExplorer(); builder.Services.AddSwaggerGen(c =>
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Nimbus.WebApi", Version = "v1" });
+                // Configure Swagger UI to use the API Key in requests
+                options.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Name = "X-API-KEY",
+                    Type = SecuritySchemeType.ApiKey,
+                    Description = "Enter your API key to access the API"
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "ApiKey"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
             });
 
             builder.Services.AddDbContext<NimbusDbContext>(options =>
@@ -45,14 +67,16 @@ namespace Nimbus.WebApi
 
             var app = builder.Build();
 
-            // Add the global exception handling middleware
+            // middleware
             app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+            app.UseMiddleware<ApiKeyMiddleware>();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Nimbus.WebApi v1"); });
+                app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Nimbus.WebApi v1"); c.DefaultModelsExpandDepth(-1); });
             }
 
             app.UseAuthorization();
