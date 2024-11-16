@@ -5,7 +5,7 @@ using Nimbus.Business.Services;
 namespace Nimbus.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/v{apiVersion}[controller]")]
+    [Route("api/v{apiVersion}/[controller]")]
     public class FolderController(IFolderService folderService) : ControllerBase
     {
         private readonly IFolderService _folderService = folderService;

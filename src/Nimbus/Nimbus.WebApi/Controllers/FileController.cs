@@ -5,7 +5,7 @@ using Nimbus.Business.Services;
 namespace Nimbus.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/v{apiVersion}[controller]")]
+    [Route("api/v{apiVersion}/[controller]")]
     public class FileController(IFileService fileService) : ControllerBase
     {
         private readonly IFileService _fileService = fileService;
