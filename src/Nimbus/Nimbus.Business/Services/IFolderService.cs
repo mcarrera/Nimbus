@@ -6,7 +6,6 @@ namespace Nimbus.Business.Services
     {
         Task CreateFolderAsync(CreateFolderRequest request, CancellationToken cancellationToken);
         Task SoftDeleteFolderAsync(Guid folderId, CancellationToken cancellationToken);
-
-        //Task<IEnumerable<Folder>> GetFoldersAsync(Guid? parentFolderId, CancellationToken cancellationToken);
+        Task<FolderDto> GetFolderTreeAsync(Guid folderId, CancellationToken cancellationToken);
     }
 }

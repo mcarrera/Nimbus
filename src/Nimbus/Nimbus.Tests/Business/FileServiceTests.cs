@@ -6,6 +6,8 @@ using Nimbus.Business.Models;
 using Nimbus.Business.Services;
 using Nimbus.Persistance.Data;
 
+namespace Nimbus.Tests.Business;
+
 public class FileServiceTests
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;

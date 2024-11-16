@@ -37,6 +37,17 @@ namespace Nimbus.Business.Services
             }
         }
 
+        public async Task<FolderDto> GetFolderTreeAsync(Guid folderId, CancellationToken cancellationToken)
+        {
+            var folder = await _unitOfWork.GetFileByIdAsync(folderId, cancellationToken);
+
+            if (folder == null || !folder.IsFolder)
+            {
+                throw new ArgumentException("Folder not found.");
+            }
+            return await BuildFolderTreeRecursiveAsync(folderId, cancellationToken);
+        }
+
         private async Task SoftDeleteChildFilesAndSubfoldersAsync(Guid parentFolderId, CancellationToken cancellationToken)
         {
             var childrens = await _unitOfWork.GetFileList(parentFolderId, cancellationToken);
@@ -51,6 +62,44 @@ namespace Nimbus.Business.Services
                     await SoftDeleteChildFilesAndSubfoldersAsync(child.Id, cancellationToken);
                 }
             }
+        }
+
+        private async Task<FolderDto> BuildFolderTreeRecursiveAsync(Guid parentFolderId, CancellationToken cancellationToken)
+        {
+            var folder = await _unitOfWork.GetFileByIdAsync(parentFolderId, cancellationToken);
+
+            var folderDto = new FolderDto
+            {
+                Id = folder!.Id,
+                FileName = folder.FileName,
+                CreatedDateTime = folder.CreatedDateTime,
+                ModifiedDate = folder.ModifiedDate,
+                IsFolder = folder.IsFolder
+            };
+
+            // Get files from this folder, then recursively fetch subfolders
+            var files = await _unitOfWork.GetFileList(parentFolderId, cancellationToken);
+            foreach (var file in files)
+            {
+                if (file.IsFolder)
+                {
+                    // Recursively add subfolders
+                    var subfolderDto = await BuildFolderTreeRecursiveAsync(file.Id, cancellationToken);
+                    folderDto.Subfolders.Add(subfolderDto);
+                }
+                else
+                {
+                    folderDto.Files.Add(new FileDto
+                    {
+                        Id = file.Id,
+                        FileName = file.FileName,
+                        CreatedDateTime = file.CreatedDateTime,
+                        ModifiedDate = file.ModifiedDate
+                    });
+                }
+            }
+
+            return folderDto;
         }
     }
 }
